@@ -1,5 +1,6 @@
 ﻿using REST.Models;
 using REST.Models.Entities;
+using REST.Representations;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,24 +16,23 @@ namespace REST.Controllers
     {
         private UniversityModel db = new UniversityModel();
 
-        public IQueryable<Course> GetCourses()
+        public CourseListRepresentation GetCourses()
         {
             List<Course> courseList = db.Courses.ToList();
-            List<Course> resultList = courseList.Select((Course course) => ToPOCO(course)).ToList();
 
-            return resultList.AsQueryable();
+
+            return new CourseListRepresentation( courseList.Select( (Course course) => ToCourseRepresentation(ToPOCO(course)) ).ToList() );
         }
 
-        [ResponseType(typeof(Course))]
-        public IHttpActionResult GetCourse(int id)
+        public CourseRepresentation GetCourse(int id)
         {
             Course course = db.Courses.Find(id);
             if (course == null)
             {
-                return NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            return Ok(ToPOCO(course));
+            return ToCourseRepresentation(ToPOCO(course));
         }
 
         [ResponseType(typeof(void))]
@@ -207,6 +207,22 @@ namespace REST.Controllers
                 Id = course.Id,
                 Name = course.Name,
                 Teachers = teachersList
+            };
+        }
+
+        private CourseRepresentation ToCourseRepresentation(Course course)
+        {
+            List<int> teachersIds = null;
+            if (course.Teachers != null)
+            {
+                teachersIds = course.Teachers.Select((Teacher t) => t.Id).ToList();
+            }
+
+            return new CourseRepresentation()
+            {
+                Id = course.Id,
+                Name = course.Name,
+                TeachersIds = teachersIds
             };
         }
     }

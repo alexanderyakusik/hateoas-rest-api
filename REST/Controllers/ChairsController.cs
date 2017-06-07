@@ -1,5 +1,6 @@
 ﻿using REST.Models;
 using REST.Models.Entities;
+using REST.Representations;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,24 +17,22 @@ namespace REST.Controllers
     {
         private UniversityModel db = new UniversityModel();
 
-        public IQueryable<Chair> GetChairs()
+        public ChairListRepresentation GetChairs()
         {
             List<Chair> chairList = db.Chairs.ToList();
-            List<Chair> resultList = chairList.Select((Chair chair) => ToPOCO(chair)).ToList();
-
-            return resultList.AsQueryable();
+            
+            return new ChairListRepresentation( chairList.Select( (Chair chair) => ToChairRepresentation(ToPOCO(chair)) ).ToList() );
         }
 
-        [ResponseType(typeof(Chair))]
-        public IHttpActionResult GetChair(int id)
+        public ChairRepresentation GetChair(int id)
         {
             Chair chair = db.Chairs.Find(id);
             if (chair == null)
             {
-                return NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            return Ok(ToPOCO(chair));
+            return ToChairRepresentation(ToPOCO(chair));
         }
 
         [ResponseType(typeof(void))]
@@ -246,6 +245,23 @@ namespace REST.Controllers
                 FacultyId = chair.FacultyId,
                 Faculty = faculty,
                 Teachers = teachersList
+            };
+        }
+
+        private ChairRepresentation ToChairRepresentation(Chair chair)
+        {
+            List<int> teachersIds = null;
+            if (chair.Teachers != null)
+            {
+                teachersIds = chair.Teachers.Select((Teacher t) => t.Id).ToList();
+            }
+
+            return new ChairRepresentation()
+            {
+                Id = chair.Id,
+                Name = chair.Name,
+                FacultyId = chair.FacultyId,
+                TeachersIds = teachersIds
             };
         }
     }

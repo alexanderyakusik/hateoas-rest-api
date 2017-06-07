@@ -10,7 +10,7 @@ namespace REST.Representations
         public string Name { get; set; }
 
         [JsonIgnore]
-        public List<int> ChairIds { get; set; }
+        public List<int> ChairsIds { get; set; }
 
         public override string Rel
         {
@@ -26,13 +26,12 @@ namespace REST.Representations
 
         protected override void CreateHypermedia()
         {
-            Links.Add(LinkTemplates.Faculties.AddFaculty.CreateLink(new { id = Id }));
             Links.Add(LinkTemplates.Faculties.UpdateFaculty.CreateLink(new { id = Id }));
             Links.Add(LinkTemplates.Faculties.DeleteFaculty.CreateLink(new { id = Id }));
 
-            if (ChairIds != null && ChairIds.Count > 0)
+            if (ChairsIds != null && ChairsIds.Count > 0)
             {
-                foreach (int chairId in ChairIds)
+                foreach (int chairId in ChairsIds)
                 {
                     Links.Add(LinkTemplates.Chairs.AttachedChairs.CreateLink(new { id = chairId }));
                 }

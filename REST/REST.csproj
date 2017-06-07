@@ -118,8 +118,14 @@
     <Compile Include="Models\Entities\Teacher.cs" />
     <Compile Include="Models\UniversityModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Representations\ChairListRepresentation.cs" />
+    <Compile Include="Representations\ChairRepresentation.cs" />
+    <Compile Include="Representations\CourseListRepresentation.cs" />
+    <Compile Include="Representations\CourseRepresentation.cs" />
     <Compile Include="Representations\FacultyListRepresentation.cs" />
     <Compile Include="Representations\FacultyRepresentation.cs" />
+    <Compile Include="Representations\TeacherListRepresentation.cs" />
+    <Compile Include="Representations\TeacherRepresentation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

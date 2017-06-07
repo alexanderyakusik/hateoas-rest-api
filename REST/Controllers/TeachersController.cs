@@ -1,5 +1,6 @@
 ﻿using REST.Models;
 using REST.Models.Entities;
+using REST.Representations;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,24 +17,22 @@ namespace REST.Controllers
     {
         private UniversityModel db = new UniversityModel();
 
-        public IQueryable<Teacher> GetTeachers()
+        public TeacherListRepresentation GetTeachers()
         {
             List<Teacher> teacherList = db.Teachers.ToList();
-            List<Teacher> resultList = teacherList.Select((Teacher teacher) => ToPOCO(teacher)).ToList();
 
-            return resultList.AsQueryable();
+            return new TeacherListRepresentation( teacherList.Select( (Teacher teacher) => ToTeacherRepresentation(ToPOCO(teacher)) ).ToList() );
         }
 
-        [ResponseType(typeof(Teacher))]
-        public IHttpActionResult GetTeacher(int id)
+        public TeacherRepresentation GetTeacher(int id)
         {
             Teacher teacher = db.Teachers.Find(id);
             if (teacher == null)
             {
-                return NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            return Ok(ToPOCO(teacher));
+            return ToTeacherRepresentation(ToPOCO(teacher));
         }
 
         [ResponseType(typeof(void))]
@@ -240,6 +239,23 @@ namespace REST.Controllers
                 ChairId = teacher.ChairId,
                 Chair = teacherChair,
                 Courses = coursesList
+            };
+        }
+
+        private TeacherRepresentation ToTeacherRepresentation(Teacher teacher)
+        {
+            List<int> coursesIds = null;
+            if (teacher.Courses != null)
+            {
+                coursesIds = teacher.Courses.Select((Course c) => c.Id).ToList();
+            }
+
+            return new TeacherRepresentation()
+            {
+                Id = teacher.Id,
+                FullName = teacher.FullName,
+                ChairId = teacher.ChairId,
+                CoursesIds = coursesIds
             };
         }
     }

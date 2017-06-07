@@ -12,6 +12,8 @@ namespace REST.Representations
 
         protected override void CreateHypermedia()
         {
+            Links.Add(LinkTemplates.Faculties.AddFaculty);
+
             Href = LinkTemplates.Faculties.GetFaculties.Href;
 
             Links.Add(new Link { Href = Href, Rel = "self" });

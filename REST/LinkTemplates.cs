@@ -12,7 +12,7 @@ namespace REST
 
             public static Link UpdateFaculty { get { return new Link("update_faculty", "~/faculties/{id}"); } }
 
-            public static Link AddFaculty { get { return new Link("add_faculty", "~/faculties/{id}"); } }
+            public static Link AddFaculty { get { return new Link("add_faculty", "~/faculties"); } }
 
             public static Link DeleteFaculty { get { return new Link("delete_faculty", "~/faculties/{id}"); } }
         }
@@ -27,7 +27,7 @@ namespace REST
 
             public static Link UpdateChair { get { return new Link("update_chair", "~/chairs/{id}"); } }
 
-            public static Link AddChair { get { return new Link("add_chair", "~/chairs/{id}"); } }
+            public static Link AddChair { get { return new Link("add_chair", "~/chairs"); } }
 
             public static Link DeleteChair { get { return new Link("delete_chair", "~/chairs/{id}"); } }
         }
@@ -36,11 +36,13 @@ namespace REST
         {
             public static Link GetTeachers { get { return new Link("teachers", "~/teachers"); } }
 
+            public static Link AttachedTeachers { get { return new Link("attached_teachers", "~/teachers/{id}"); } }
+
             public static Link Teacher { get { return new Link("teacher", "~/teachers/{id}"); } }
 
             public static Link UpdateTeacher { get { return new Link("update_teacher", "~/teachers/{id}"); } }
 
-            public static Link AddTeacher { get { return new Link("add_teacher", "~/teachers/{id}"); } }
+            public static Link AddTeacher { get { return new Link("add_teacher", "~/teachers"); } }
 
             public static Link DeleteTeacher { get { return new Link("delete_teacher", "~/teachers/{id}"); } }
         }
@@ -49,11 +51,13 @@ namespace REST
         {
             public static Link GetCourses { get { return new Link("courses", "~/courses"); } }
 
+            public static Link AttachedCourses { get { return new Link("attached_courses", "~/courses/{id}"); } }
+
             public static Link Course { get { return new Link("course", "~/courses/{id}"); } }
 
             public static Link UpdateCourse { get { return new Link("update_course", "~/courses/{id}"); } }
 
-            public static Link AddCourse { get { return new Link("add_course", "~/courses/{id}"); } }
+            public static Link AddCourse { get { return new Link("add_course", "~/courses"); } }
 
             public static Link DeleteCourse { get { return new Link("delete_course", "~/courses/{id}"); } }
         }

@@ -137,17 +137,17 @@ namespace REST.Controllers
 
         private FacultyRepresentation ToFacultyRepresentation(Faculty faculty)
         {
-            List<int> ChairIds = null;
+            List<int> chairsIds = null;
             if (faculty.Chairs != null)
             {
-                ChairIds = faculty.Chairs.Select((Chair c) => c.Id).ToList();
+                chairsIds = faculty.Chairs.Select((Chair c) => c.Id).ToList();
             }
 
             return new FacultyRepresentation()
             {
                 Id = faculty.Id,
                 Name = faculty.Name,
-                ChairIds = ChairIds
+                ChairsIds = chairsIds
             };
         }
 
