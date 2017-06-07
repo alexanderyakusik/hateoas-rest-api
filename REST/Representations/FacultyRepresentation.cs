@@ -26,11 +26,15 @@ namespace REST.Representations
 
         protected override void CreateHypermedia()
         {
+            Links.Add(LinkTemplates.Faculties.AddFaculty.CreateLink(new { id = Id }));
+            Links.Add(LinkTemplates.Faculties.UpdateFaculty.CreateLink(new { id = Id }));
+            Links.Add(LinkTemplates.Faculties.DeleteFaculty.CreateLink(new { id = Id }));
+
             if (ChairIds != null && ChairIds.Count > 0)
             {
-                foreach (int id in ChairIds)
+                foreach (int chairId in ChairIds)
                 {
-                    Links.Add(LinkTemplates.Chairs.Chair.CreateLink(new { id = Id }));
+                    Links.Add(LinkTemplates.Chairs.AttachedChairs.CreateLink(new { id = chairId }));
                 }
             }
         }

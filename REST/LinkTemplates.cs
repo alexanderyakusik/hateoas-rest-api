@@ -21,6 +21,8 @@ namespace REST
         {
             public static Link GetChairs { get { return new Link("chairs", "~/chairs"); } }
 
+            public static Link AttachedChairs { get { return new Link("attached_chairs", "~/chairs/{id}"); } }
+
             public static Link Chair { get { return new Link("chair", "~/chairs/{id}"); } }
 
             public static Link UpdateChair { get { return new Link("update_chair", "~/chairs/{id}"); } }

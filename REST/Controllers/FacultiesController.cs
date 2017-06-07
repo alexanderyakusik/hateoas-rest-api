@@ -1,15 +1,15 @@
-﻿using System;
+﻿using REST.Models;
+using REST.Models.Entities;
+using REST.Representations;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using REST.Models;
-using REST.Models.Entities;
 
 namespace REST.Controllers
 {
@@ -17,24 +17,22 @@ namespace REST.Controllers
     {
         private UniversityModel db = new UniversityModel();
 
-        public IQueryable<Faculty> GetFaculties()
+        public FacultyListRepresentation GetFaculties()
         {
-            List<Faculty> faculties = db.Faculties.ToList();
-            List<Faculty> resultList = faculties.Select((Faculty f) => ToPOCO(f)).ToList();
+            List<Faculty> dbFaculties = db.Faculties.ToList();
 
-            return resultList.AsQueryable();
+            return new FacultyListRepresentation( dbFaculties.Select( (Faculty f) => ToFacultyRepresentation(ToPOCO(f)) ).ToList() );
         }
 
-        [ResponseType(typeof(Faculty))]
-        public IHttpActionResult GetFaculty(int id)
+        public FacultyRepresentation GetFaculty(int id)
         {
             Faculty faculty = db.Faculties.Find(id);
             if (faculty == null)
             {
-                return NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            return Ok(ToPOCO(faculty));
+            return ToFacultyRepresentation(ToPOCO(faculty));
         }
 
         [ResponseType(typeof(void))]
@@ -134,6 +132,22 @@ namespace REST.Controllers
                 Id = faculty.Id,
                 Name = faculty.Name,
                 Chairs = chairs
+            };
+        }
+
+        private FacultyRepresentation ToFacultyRepresentation(Faculty faculty)
+        {
+            List<int> ChairIds = null;
+            if (faculty.Chairs != null)
+            {
+                ChairIds = faculty.Chairs.Select((Chair c) => c.Id).ToList();
+            }
+
+            return new FacultyRepresentation()
+            {
+                Id = faculty.Id,
+                Name = faculty.Name,
+                ChairIds = ChairIds
             };
         }
 

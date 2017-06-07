@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using WebApi.Hal;
 
 namespace REST
 {
@@ -7,6 +8,9 @@ namespace REST
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+
+            GlobalConfiguration.Configuration.Formatters.Add(new JsonHalMediaTypeFormatter());
+            GlobalConfiguration.Configuration.Formatters.Add(new XmlHalMediaTypeFormatter());
         }
     }
 }
